@@ -4,97 +4,254 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HelpDesk Pro — Gestão de Chamados</title>
+  <title>HelpDesk Pro — Sistema de Gestão de Chamados</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
-    body { background: #f4f6f9; color: #1f2937; padding: 20px; }
-    .container { max-width: 960px; margin: 0 auto; }
-    header { background: #111827; color: #fff; padding: 18px 24px; border-radius: 8px; margin-bottom: 20px; }
-    header p { color: #9ca3af; font-size: 14px; margin-top: 4px; }
-    .grid { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
-    .card { background: #fff; padding: 18px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
-    .card h2 { font-size: 18px; margin-bottom: 14px; }
-    label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 6px; margin-top: 10px; }
-    input, select, textarea, button { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #d1d5db; font-size: 14px; }
-    button { background: #2563eb; color: #fff; border: none; font-weight: bold; cursor: pointer; margin-top: 14px; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
+    body { background: #f1f5f9; color: #1e293b; padding: 20px; }
+    .container { max-width: 1080px; margin: 0 auto; }
+    header { background: #0f172a; color: #fff; padding: 18px 24px; border-radius: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    header h1 { font-size: 22px; }
+    header p { color: #94a3b8; font-size: 13px; margin-top: 2px; }
+    .user-bar { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+    .user-bar select { width: auto; padding: 6px 10px; background: #1e293b; color: #fff; border: 1px solid #334155; }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+    .stat-card { background: #fff; padding: 14px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border-left: 4px solid #2563eb; }
+    .stat-card span { font-size: 12px; color: #64748b; display: block; }
+    .stat-card strong { font-size: 22px; color: #0f172a; }
+    .grid { display: grid; grid-template-columns: 340px 1fr; gap: 20px; }
+    .card { background: #fff; padding: 18px; border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    .card h2 { font-size: 17px; margin-bottom: 12px; color: #0f172a; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; }
+    label { display: block; font-size: 12px; font-weight: bold; margin-bottom: 5px; margin-top: 10px; color: #334155; }
+    input, select, textarea, button { width: 100%; padding: 9px 11px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 13px; }
+    button { background: #2563eb; color: #fff; border: none; font-weight: bold; cursor: pointer; margin-top: 14px; transition: 0.2s; }
     button:hover { background: #1d4ed8; }
+    .btn-sec { background: #475569; margin-top: 8px; padding: 6px 10px; font-size: 12px; width: auto; }
+    .btn-sec:hover { background: #334155; }
     .filtros { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
     .filtros select { width: auto; flex: 1; min-width: 150px; }
-    .chamado { border: 1px solid #e5e7eb; border-radius: 6px; padding: 12px; margin-bottom: 10px; background: #fafafa; }
-    .chamado-topo { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-weight: bold; }
-    .badge { font-size: 12px; padding: 3px 8px; border-radius: 12px; background: #e5e7eb; }
-    .chamado p { font-size: 14px; color: #4b5563; margin-top: 6px; }
-    @media (max-width: 768px) {
+    .chamado { border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px; margin-bottom: 12px; background: #f8fafc; }
+    .chamado-topo { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .chamado-titulo { font-weight: bold; font-size: 15px; color: #0f172a; }
+    .badges { display: flex; gap: 6px; flex-wrap: wrap; }
+    .badge { font-size: 11px; padding: 3px 9px; border-radius: 12px; font-weight: bold; }
+    .prio-Alta, .prio-Urgente { background: #fee2e2; color: #b91c1c; }
+    .prio-Média { background: #fef3c7; color: #b45309; }
+    .prio-Baixa { background: #dcfce7; color: #15803d; }
+    .status-badge { background: #e0e7ff; color: #1d4ed8; }
+    .chamado p { font-size: 13px; color: #475569; margin-top: 8px; line-height: 1.4; }
+    .meta { font-size: 11px; color: #64748b; margin-top: 6px; }
+    .acoes-tecnico { display: flex; gap: 8px; align-items: center; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #cbd5e1; flex-wrap: wrap; }
+    .acoes-tecnico select { width: auto; padding: 5px 8px; font-size: 12px; }
+    .acoes-tecnico input { flex: 1; min-width: 180px; padding: 6px 9px; font-size: 12px; }
+    .comentarios { margin-top: 8px; padding-left: 10px; border-left: 2px solid #94a3b8; font-size: 12px; color: #334155; }
+    .comentarios div { margin-top: 4px; }
+    @media (max-width: 820px) {
       .grid { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>HelpDesk Pro</h1>
-      <p>Gestão de Chamados e Suporte Técnico</p>
+      <div>
+        <h1>HelpDesk Pro</h1>
+        <p>Sistema de Gestão de Chamados e Suporte Técnico — UCEFF</p>
+      </div>
+      <div class="user-bar">
+        <span>Perfil ativo:</span>
+        <select id="usuario-ativo">
+          <option value="Kevin Josué (Administrador)">Kevin Josué (Administrador)</option>
+          <option value="Felipe Fontana (Técnico)">Felipe Fontana (Técnico)</option>
+          <option value="Maria Souza (Cliente)">Maria Souza (Cliente)</option>
+        </select>
+      </div>
     </header>
 
+    <div class="stats">
+      <div class="stat-card"><span>Total de Chamados</span><strong id="st-total">0</strong></div>
+      <div class="stat-card" style="border-color:#f59e0b"><span>Abertos</span><strong id="st-aberto">0</strong></div>
+      <div class="stat-card" style="border-color:#0284c7"><span>Em Andamento</span><strong id="st-andamento">0</strong></div>
+      <div class="stat-card" style="border-color:#16a34a"><span>Concluídos</span><strong id="st-concluido">0</strong></div>
+    </div>
+
     <div class="grid">
+      <div>
+        <section class="card">
+          <h2>Abrir Novo Chamado (RF02)</h2>
+          <form id="form-chamado">
+            <label for="titulo">Título do Chamado</label>
+            <input id="titulo" type="text" placeholder="Ex.: Falha na rede do setor fiscal" required />
+
+            <label for="prioridade">Nível de Prioridade</label>
+            <select id="prioridade">
+              <option value="Baixa">Baixa</option>
+              <option value="Média" selected>Média</option>
+              <option value="Alta">Alta</option>
+              <option value="Urgente">Urgente</option>
+            </select>
+
+            <label for="descricao">Descrição Detalhada</label>
+            <textarea id="descricao" rows="3" placeholder="Descreva o incidente ou solicitação..." required></textarea>
+
+            <button type="submit">Registrar Chamado</button>
+          </form>
+        </section>
+
+        <section class="card" style="margin-top: 20px;">
+          <h2>Cadastrar Usuário (RF01)</h2>
+          <form id="form-usuario">
+            <label for="nome-user">Nome Completo</label>
+            <input id="nome-user" type="text" placeholder="Ex.: Ana Paula" required />
+            <label for="perfil-user">Tipo de Perfil</label>
+            <select id="perfil-user">
+              <option value="Cliente">Cliente</option>
+              <option value="Técnico">Técnico</option>
+              <option value="Administrador">Administrador</option>
+            </select>
+            <button type="submit">Adicionar Usuário</button>
+          </form>
+        </section>
+      </div>
+
       <section class="card">
-        <h2>Novo Chamado</h2>
-        <form id="form-chamado">
-          <label for="titulo">Título</label>
-          <input id="titulo" type="text" placeholder="Ex.: Erro na impressora" required />
-
-          <label for="prioridade">Prioridade</label>
-          <select id="prioridade">
-            <option value="Baixa">Baixa</option>
-            <option value="Média" selected>Média</option>
-            <option value="Alta">Alta</option>
-            <option value="Urgente">Urgente</option>
-          </select>
-
-          <label for="descricao">Descrição</label>
-          <textarea id="descricao" rows="4" placeholder="Descreva o problema..." required></textarea>
-
-          <button type="submit">Registrar Chamado</button>
-        </form>
-      </section>
-
-      <section class="card">
-        <h2>Chamados</h2>
+        <h2>Fila de Chamados e Triagem (RF03 / RF04)</h2>
         <div class="filtros">
-          <select id="filtro-status">
-            <option value="">Todos os status</option>
+          <select id="filtro-status" onchange="renderizar()">
+            <option value="">Filtrar por Status (Todos)</option>
             <option value="Aberto">Aberto</option>
             <option value="Em Andamento">Em Andamento</option>
             <option value="Concluído">Concluído</option>
             <option value="Cancelado">Cancelado</option>
           </select>
-          <select id="filtro-prioridade">
-            <option value="">Todas as prioridades</option>
+          <select id="filtro-prioridade" onchange="renderizar()">
+            <option value="">Filtrar por Prioridade (Todas)</option>
             <option value="Baixa">Baixa</option>
             <option value="Média">Média</option>
             <option value="Alta">Alta</option>
             <option value="Urgente">Urgente</option>
           </select>
         </div>
-
-        <div id="lista-chamados">
-          <div class="chamado">
-            <div class="chamado-topo">
-              <span>Erro na impressora do setor fiscal</span>
-              <span class="badge">Alta • Aberto</span>
-            </div>
-            <p>A impressora principal não está puxando papel nem respondendo aos comandos da rede.</p>
-          </div>
-          <div class="chamado">
-            <div class="chamado-topo">
-              <span>Lentidão no sistema ERP</span>
-              <span class="badge">Média • Em Andamento</span>
-            </div>
-            <p>O sistema está travando ao tentar gerar os relatórios mensais.</p>
-          </div>
-        </div>
+        <div id="lista-chamados"></div>
       </section>
     </div>
   </div>
+
+  <script>
+    let chamados = [
+      {
+        id: 1,
+        titulo: "Erro na impressora do setor fiscal",
+        descricao: "A impressora principal não está puxando papel nem respondendo aos comandos da rede.",
+        prioridade: "Alta",
+        status: "Aberto",
+        solicitante: "Maria Souza (Cliente)",
+        comentarios: ["Felipe Fontana (Técnico): Chamado recebido pela equipe de suporte. Vamos verificar o driver da impressora."]
+      },
+      {
+        id: 2,
+        titulo: "Lentidão no sistema ERP",
+        descricao: "O sistema está travando ao tentar gerar os relatórios mensais.",
+        prioridade: "Média",
+        status: "Em Andamento",
+        solicitante: "Maria Souza (Cliente)",
+        comentarios: ["Kevin Josué (Administrador): Análise de consumo de memória iniciada no servidor."]
+      }
+    ];
+
+    document.getElementById("form-chamado").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const titulo = document.getElementById("titulo").value.trim();
+      const prioridade = document.getElementById("prioridade").value;
+      const descricao = document.getElementById("descricao").value.trim();
+      const solicitante = document.getElementById("usuario-ativo").value;
+
+      chamados.unshift({
+        id: chamados.length + 1,
+        titulo,
+        descricao,
+        prioridade,
+        status: "Aberto",
+        solicitante,
+        comentarios: []
+      });
+      this.reset();
+      renderizar();
+    });
+
+    document.getElementById("form-usuario").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const nome = document.getElementById("nome-user").value.trim();
+      const perfil = document.getElementById("perfil-user").value;
+      const select = document.getElementById("usuario-ativo");
+      const opt = document.createElement("option");
+      opt.value = `${nome} (${perfil})`;
+      opt.textContent = `${nome} (${perfil})`;
+      select.appendChild(opt);
+      select.value = opt.value;
+      this.reset();
+      alert(`Usuário ${opt.value} cadastrado com sucesso!`);
+    });
+
+    function alterarStatus(id, novoStatus) {
+      const c = chamados.find(item => item.id === id);
+      if (c) { c.status = novoStatus; renderizar(); }
+    }
+
+    function adicionarComentario(id) {
+      const input = document.getElementById(`coment-${id}`);
+      const texto = input.value.trim();
+      if (!texto) return;
+      const autor = document.getElementById("usuario-ativo").value;
+      const c = chamados.find(item => item.id === id);
+      if (c) {
+        c.comentarios.push(`${autor}: ${texto}`);
+        renderizar();
+      }
+    }
+
+    function renderizar() {
+      const fStatus = document.getElementById("filtro-status").value;
+      const fPrio = document.getElementById("filtro-prioridade").value;
+      const lista = document.getElementById("lista-chamados");
+
+      document.getElementById("st-total").textContent = chamados.length;
+      document.getElementById("st-aberto").textContent = chamados.filter(c => c.status === "Aberto").length;
+      document.getElementById("st-andamento").textContent = chamados.filter(c => c.status === "Em Andamento").length;
+      document.getElementById("st-concluido").textContent = chamados.filter(c => c.status === "Concluído").length;
+
+      const filtrados = chamados.filter(c =>
+        (!fStatus || c.status === fStatus) && (!fPrio || c.prioridade === fPrio)
+      );
+
+      lista.innerHTML = filtrados.map(c => `
+        <div class="chamado">
+          <div class="chamado-topo">
+            <span class="chamado-titulo">#${c.id} — ${c.titulo}</span>
+            <div class="badges">
+              <span class="badge prio-${c.prioridade}">${c.prioridade}</span>
+              <span class="badge status-badge">${c.status}</span>
+            </div>
+          </div>
+          <p>${c.descricao}</p>
+          <div class="meta">Aberto por: <strong>${c.solicitante}</strong></div>
+          <div class="comentarios">
+            ${c.comentarios.map(com => `<div>💬 ${com}</div>`).join("")}
+          </div>
+          <div class="acoes-tecnico">
+            <select onchange="alterarStatus(${c.id}, this.value)">
+              ${["Aberto", "Em Andamento", "Concluído", "Cancelado"].map(st =>
+                `<option value="${st}" ${c.status === st ? "selected" : ""}>${st}</option>`
+              ).join("")}
+            </select>
+            <input id="coment-${c.id}" type="text" placeholder="Adicionar interação técnica..." />
+            <button type="button" class="btn-sec" onclick="adicionarComentario(${c.id})">Comentar</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    renderizar();
+  </script>
 </body>
 </html>
