@@ -1,1 +1,100 @@
 
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HelpDesk Pro — Gestão de Chamados</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+    body { background: #f4f6f9; color: #1f2937; padding: 20px; }
+    .container { max-width: 960px; margin: 0 auto; }
+    header { background: #111827; color: #fff; padding: 18px 24px; border-radius: 8px; margin-bottom: 20px; }
+    header p { color: #9ca3af; font-size: 14px; margin-top: 4px; }
+    .grid { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
+    .card { background: #fff; padding: 18px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    .card h2 { font-size: 18px; margin-bottom: 14px; }
+    label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 6px; margin-top: 10px; }
+    input, select, textarea, button { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #d1d5db; font-size: 14px; }
+    button { background: #2563eb; color: #fff; border: none; font-weight: bold; cursor: pointer; margin-top: 14px; }
+    button:hover { background: #1d4ed8; }
+    .filtros { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+    .filtros select { width: auto; flex: 1; min-width: 150px; }
+    .chamado { border: 1px solid #e5e7eb; border-radius: 6px; padding: 12px; margin-bottom: 10px; background: #fafafa; }
+    .chamado-topo { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-weight: bold; }
+    .badge { font-size: 12px; padding: 3px 8px; border-radius: 12px; background: #e5e7eb; }
+    .chamado p { font-size: 14px; color: #4b5563; margin-top: 6px; }
+    @media (max-width: 768px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>HelpDesk Pro</h1>
+      <p>Gestão de Chamados e Suporte Técnico</p>
+    </header>
+
+    <div class="grid">
+      <section class="card">
+        <h2>Novo Chamado</h2>
+        <form id="form-chamado">
+          <label for="titulo">Título</label>
+          <input id="titulo" type="text" placeholder="Ex.: Erro na impressora" required />
+
+          <label for="prioridade">Prioridade</label>
+          <select id="prioridade">
+            <option value="Baixa">Baixa</option>
+            <option value="Média" selected>Média</option>
+            <option value="Alta">Alta</option>
+            <option value="Urgente">Urgente</option>
+          </select>
+
+          <label for="descricao">Descrição</label>
+          <textarea id="descricao" rows="4" placeholder="Descreva o problema..." required></textarea>
+
+          <button type="submit">Registrar Chamado</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Chamados</h2>
+        <div class="filtros">
+          <select id="filtro-status">
+            <option value="">Todos os status</option>
+            <option value="Aberto">Aberto</option>
+            <option value="Em Andamento">Em Andamento</option>
+            <option value="Concluído">Concluído</option>
+            <option value="Cancelado">Cancelado</option>
+          </select>
+          <select id="filtro-prioridade">
+            <option value="">Todas as prioridades</option>
+            <option value="Baixa">Baixa</option>
+            <option value="Média">Média</option>
+            <option value="Alta">Alta</option>
+            <option value="Urgente">Urgente</option>
+          </select>
+        </div>
+
+        <div id="lista-chamados">
+          <div class="chamado">
+            <div class="chamado-topo">
+              <span>Erro na impressora do setor fiscal</span>
+              <span class="badge">Alta • Aberto</span>
+            </div>
+            <p>A impressora principal não está puxando papel nem respondendo aos comandos da rede.</p>
+          </div>
+          <div class="chamado">
+            <div class="chamado-topo">
+              <span>Lentidão no sistema ERP</span>
+              <span class="badge">Média • Em Andamento</span>
+            </div>
+            <p>O sistema está travando ao tentar gerar os relatórios mensais.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</body>
+</html>
